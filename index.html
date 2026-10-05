@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Employee Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #222;
+        }
+
+        /* Header */
+        header {
+            background: #1e3a8a;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 15px;
+        }
+
+        /* Main Container */
+        .container {
+            width: 95%;
+            max-width: 1300px;
+            margin: 30px auto;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .form-group input {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+        }
+
+        /* Buttons */
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .add-btn {
+            background: #1e3a8a;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background: #172554;
+        }
+
+        .update-btn {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .clear-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Search */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th {
+            background: #1e3a8a;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Message */
+        #message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: #1e3a8a;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Employee Management System</h1>
+    <p>Employee Information Management Application</p>
+</header>
+
+<div class="container">
+
+    <!-- Employee Form -->
+    <div class="card">
+
+        <h2 id="formTitle">Add Employee</h2>
+
+        <div id="message"></div>
+
+        <form id="employeeForm">
+
+            <div class="form-grid">
+
+                <!-- Employee ID -->
+                <div class="form-group">
+                    <label>Employee ID</label>
+                    <input
+                        type="text"
+                        id="employeeId"
+                        placeholder="Enter Employee ID"
+                        required
+                    >
+                </div>
+
+                <!-- Employee Name -->
+                <div class="form-group">
+                    <label>Employee Name</label>
+                    <input
+                        type="text"
+                        id="employeeName"
+                        placeholder="Enter Employee Name"
+                        required
+                    >
+                </div>
+
+                <!-- Department -->
+                <div class="form-group">
+                    <label>Department</label>
+                    <input
+                        type="text"
+                        id="department"
+                        placeholder="Enter Department"
+                        required
+                    >
+                </div>
+
+                <!-- Designation -->
+                <div class="form-group">
+                    <label>Designation</label>
+                    <input
+                        type="text"
+                        id="designation"
+                        placeholder="Enter Designation"
+                        required
+                    >
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter Email"
+                        required
+                    >
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter Phone Number"
+                        required
+                    >
+                </div>
+
+                <!-- Salary -->
+                <div class="form-group">
+                    <label>Salary</label>
+                    <input
+                        type="number"
+                        id="salary"
+                        placeholder="Enter Salary"
+                        min="0"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="add-btn"
+                    id="submitButton">
+                    Add Employee
+                </button>
+
+                <button
+                    type="button"
+                    class="clear-btn"
+                    onclick="clearForm()">
+                    Clear
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- Employee List -->
+    <div class="card">
+
+        <h2>Employee List</h2>
+
+        <!-- Search -->
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by ID, name, department, designation or email..."
+                onkeyup="searchEmployees()"
+            >
+
+        </div>
+
+
+        <!-- Table -->
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="employeeTableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <p>Employee Management System | DevOps Project</p>
+</footer>
+
+
+<script>
+
+    // Store employees
+    let employees = JSON.parse(
+        localStorage.getItem("employees")
+    ) || [];
+
+    // Current employee being edited
+    let editIndex = -1;
+
+
+    // Display employees when page loads
+    displayEmployees();
+
+
+    // Add / Update Employee
+    document
+        .getElementById("employeeForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            // Get values
+            const employeeId =
+                document.getElementById("employeeId").value.trim();
+
+            const employeeName =
+                document.getElementById("employeeName").value.trim();
+
+            const department =
+                document.getElementById("department").value.trim();
+
+            const designation =
+                document.getElementById("designation").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const phone =
+                document.getElementById("phone").value.trim();
+
+            const salary =
+                document.getElementById("salary").value.trim();
+
+
+            // Validation
+            if (
+                employeeId === "" ||
+                employeeName === "" ||
+                department === "" ||
+                designation === "" ||
+                email === "" ||
+                phone === "" ||
+                salary === ""
+            ) {
+
+                showMessage(
+                    "Please fill all fields.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            // Check duplicate Employee ID
+            if (editIndex === -1) {
+
+                const duplicate = employees.some(
+                    employee =>
+                        employee.id.toLowerCase() ===
+                        employeeId.toLowerCase()
+                );
+
+                if (duplicate) {
+
+                    showMessage(
+                        "Employee ID already exists.",
+                        "error"
+                    );
+
+                    return;
+                }
+            }
+
+
+            // Employee object
+            const employee = {
+
+                id: employeeId,
+
+                name: employeeName,
+
+                department: department,
+
+                designation: designation,
+
+                email: email,
+
+                phone: phone,
+
+                salary: salary
+
+            };
+
+
+            // Add employee
+            if (editIndex === -1) {
+
+                employees.push(employee);
+
+                showMessage(
+                    "Employee added successfully!",
+                    "success"
+                );
+
+            }
+
+            // Update employee
+            else {
+
+                employees[editIndex] = employee;
+
+                showMessage(
+                    "Employee updated successfully!",
+                    "success"
+                );
+
+                editIndex = -1;
+
+                document.getElementById(
+                    "formTitle"
+                ).innerText = "Add Employee";
+
+                document.getElementById(
+                    "submitButton"
+                ).innerText = "Add Employee";
+            }
+
+
+            // Save to browser
+            localStorage.setItem(
+                "employees",
+                JSON.stringify(employees)
+            );
+
+
+            // Refresh table
+            displayEmployees();
+
+
+            // Clear form
+            document
+                .getElementById("employeeForm")
+                .reset();
+
+        });
+
+
+    // Display Employees
+    function displayEmployees(employeeList = employees) {
+
+        const tableBody =
+            document.getElementById(
+                "employeeTableBody"
+            );
+
+        tableBody.innerHTML = "";
+
+
+        if (employeeList.length === 0) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8"
+                        style="text-align:center;">
+                        No employees found
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        employeeList.forEach(
+            (employee) => {
+
+                // Find actual index
+                const index =
+                    employees.findIndex(
+                        e => e.id === employee.id
+                    );
+
+
+                const row = document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td>${employee.id}</td>
+
+                    <td>${employee.name}</td>
+
+                    <td>${employee.department}</td>
+
+                    <td>${employee.designation}</td>
+
+                    <td>${employee.email}</td>
+
+                    <td>${employee.phone}</td>
+
+                    <td>₹${Number(employee.salary).toLocaleString("en-IN")}</td>
+
+                    <td>
+
+                        <button
+                            class="edit-btn"
+                            onclick="editEmployee(${index})">
+                            Edit
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteEmployee(${index})">
+                            Delete
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                tableBody.appendChild(row);
+
+            }
+        );
+
+    }
+
+
+    // Edit Employee
+    function editEmployee(index) {
+
+        const employee =
+            employees[index];
+
+
+        document.getElementById(
+            "employeeId"
+        ).value = employee.id;
+
+
+        document.getElementById(
+            "employeeName"
+        ).value = employee.name;
+
+
+        document.getElementById(
+            "department"
+        ).value = employee.department;
+
+
+        document.getElementById(
+            "designation"
+        ).value = employee.designation;
+
+
+        document.getElementById(
+            "email"
+        ).value = employee.email;
+
+
+        document.getElementById(
+            "phone"
+        ).value = employee.phone;
+
+
+        document.getElementById(
+            "salary"
+        ).value = employee.salary;
+
+
+        editIndex = index;
+
+
+        document.getElementById(
+            "formTitle"
+        ).innerText = "Update Employee";
+
+
+        document.getElementById(
+            "submitButton"
+        ).innerText = "Update Employee";
+
+
+        // Scroll to form
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    // Delete Employee
+    function deleteEmployee(index) {
+
+        const employee =
+            employees[index];
+
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to delete " +
+                employee.name +
+                "?"
+            );
+
+
+        if (!confirmDelete) {
+            return;
+        }
+
+
+        employees.splice(index, 1);
+
+
+        localStorage.setItem(
+            "employees",
+            JSON.stringify(employees)
+        );
+
+
+        displayEmployees();
+
+
+        showMessage(
+            "Employee deleted successfully!",
+            "success"
+        );
+
+    }
+
+
+    // Search Employee
+    function searchEmployees() {
+
+        const searchText =
+            document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        const filteredEmployees =
+            employees.filter(
+                employee =>
+
+                    employee.id
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    employee.name
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    employee.department
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    employee.designation
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    employee.email
+                        .toLowerCase()
+                        .includes(searchText)
+
+            );
+
+
+        displayEmployees(
+            filteredEmployees
+        );
+
+    }
+
+
+    // Clear Form
+    function clearForm() {
+
+        document
+            .getElementById("employeeForm")
+            .reset();
+
+
+        editIndex = -1;
+
+
+        document.getElementById(
+            "formTitle"
+        ).innerText = "Add Employee";
+
+
+        document.getElementById(
+            "submitButton"
+        ).innerText = "Add Employee";
+
+    }
+
+
+    // Show Message
+    function showMessage(
+        message,
+        type
+    ) {
+
+        const messageBox =
+            document.getElementById(
+                "message"
+            );
+
+
+        messageBox.innerText =
+            message;
+
+
+        messageBox.className =
+            type;
+
+
+        messageBox.style.display =
+            "block";
+
+
+        setTimeout(
+            function() {
+
+                messageBox.style.display =
+                    "none";
+
+            },
+            3000
+        );
+
+    }
+
+</script>
+
+</body>
+</html>
